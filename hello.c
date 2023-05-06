@@ -2,6 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/sched/signal.h>
+#include <linux/mm_types.h>
 static int init_hello(void)
 {
 	printk(KERN_INFO "Hello, World!\n");
@@ -10,11 +11,12 @@ static int init_hello(void)
 
 	int pid_no = current->pid;
 	struct task_struct *task = current;
+    struct mm_struct *mm;
 	for_each_process(task)
 	{
 		if (task->pid == pid_no)
 			break;
-		printk(KERN_ALERT "process id = %d tpid= %d", (int)task->pid, (int)task->comm);
+		printk(KERN_ALERT "process id = %d tpid= %d start_code = %lx", (int)task->pid, (int)task->comm, mm->start_code);
 	}
 	return 0;
 }
