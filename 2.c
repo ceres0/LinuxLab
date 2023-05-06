@@ -12,7 +12,7 @@ int main(void)
 	{
 		printf("It's the parent process,the pid of child:%d\n", pid);
 		printf("In the parent process,count = %d\n", count);
-		scanf("%d", a);
+		scanf("%d", &a);
 	}
 	else if (!pid) // pid==0   is child
 	{
@@ -20,7 +20,7 @@ int main(void)
 		printf("Do your own things here.\n");
 		count++;
 		printf("In the child process, count = %d\n", count);
-		// scanf("%d",a);
+		// printf("%d\n",a);
 	}
 	else // pid<0  failed
 	{

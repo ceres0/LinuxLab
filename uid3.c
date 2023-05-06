@@ -16,12 +16,12 @@ int main(int argc, char **argv)
     my_gid = getgid();
     my_egid = getegid();
 
-    printf("Process ID:%ld\n", my_pid);
-    printf("Parent ID:%ld\n", parent_pid);
-    printf("User ID:%ld\n", my_uid);
-    printf("Effective User ID:%ld\n", my_euid);
-    printf("Group ID:%ld\n", my_gid);
-    printf("Effective Group ID:%ld\n", my_egid);
+    printf("Process ID:%d\n", my_pid);
+    printf("Parent ID:%d\n", parent_pid);
+    printf("User ID:%d\n", my_uid);
+    printf("Effective User ID:%d\n", my_euid);
+    printf("Group ID:%d\n", my_gid);
+    printf("Effective Group ID:%d\n", my_egid);
 
     my_info = getpwuid(my_uid);
 
@@ -29,8 +29,8 @@ int main(int argc, char **argv)
     {
         printf("My Login Name:%s\n", my_info->pw_name);
         printf("My Password :%s\n", my_info->pw_passwd);
-        printf("My User ID :%ld\n", my_info->pw_uid);
-        printf("My Group ID :%ld\n", my_info->pw_gid);
+        printf("My User ID :%d\n", my_info->pw_uid);
+        printf("My Group ID :%d\n", my_info->pw_gid);
         printf("My Real Name:%s\n", my_info->pw_gecos);
         printf("My Home Dir :%s\n", my_info->pw_dir);
         printf("My Work Shell:%s\n", my_info->pw_shell);
