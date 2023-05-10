@@ -12,12 +12,8 @@ static int init_hello(void)
 	int pid_no = current->pid;
 	struct task_struct *task = current;
     struct mm_struct *mm;
-	for_each_process(task)
-	{
-		if (task->pid == pid_no)
-			break;
-		printk(KERN_ALERT "process id = %d tpid= %d start_code = %lx", (int)task->pid, (int)task->comm, mm->start_code);
-	}
+	mm = task -> active_mm;
+	printk(KERN_ALERT "process id = %d tpid= %d start_code = %lx", (int)task->pid, (int)task->comm, mm->start_code);
 	return 0;
 }
 static void cleanup_hello(void)
