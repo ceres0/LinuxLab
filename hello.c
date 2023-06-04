@@ -1,7 +1,6 @@
 #include <linux/module.h>
-#include <linux/kernel.h>
 #include <linux/init.h>
-#include <linux/sched/signal.h>
+#include <linux/sched/signal.h> // 同实验一
 #include <linux/mm_types.h>
 static int init_hello(void)
 {
@@ -9,7 +8,6 @@ static int init_hello(void)
 	printk(KERN_ALERT "pid=%i   command=%s ", current->pid, current->comm);
 	printk(KERN_ALERT "\n");
 
-	int pid_no = current->pid;
 	struct task_struct *task = current;
     struct mm_struct *mm;
 	mm = task -> active_mm;
