@@ -1,5 +1,4 @@
 #include <linux/module.h>
-#include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/unistd.h>
 #include <linux/time.h>
@@ -108,4 +107,4 @@ static void __exit exit_addsyscall(void)
 
 module_init(init_addsyscall);
 module_exit(exit_addsyscall);
-// MODULE_LICENSE("GPL");
+MODULE_LICENSE("GPL");
