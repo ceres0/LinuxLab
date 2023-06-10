@@ -1,6 +1,7 @@
 #include <linux/module.h>
 #include <linux/init.h>
-#include <linux/sched/signal.h> // 在4.11内核中，<linux/signal.h>被移到了<linux/sched/signal.h>中
+#include <linux/sched.h>
+#include <linux/sched/signal.h> // 在4.11内核中，for_each_process从<linux/sched.h>移到了<linux/sched/signal.h>中
 static int init_hello(void)
 {
 	printk(KERN_INFO "Hello, World!\n");    
