@@ -1,5 +1,6 @@
 #include <linux/module.h>
 #include <linux/init.h>
+#include <linux/sched.h>
 #include <linux/sched/signal.h> // 同实验一
 #include <linux/mm_types.h>
 static int init_hello(void)
