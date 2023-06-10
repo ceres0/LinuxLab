@@ -7,16 +7,15 @@ static int init_hello(void)
 {
 	printk(KERN_INFO "Hello, World!\n");
 	printk(KERN_ALERT "pid=%i   command=%s ", current->pid, current->comm);
-	printk(KERN_ALERT "\n");
 
 	struct task_struct *task = current;
     struct mm_struct *mm;
 	mm = task -> active_mm;
-	printk(KERN_ALERT "process id = %d tpid= %d start_code = %lx", (int)task->pid, (int)task->comm, mm->start_code);
+	printk(KERN_ALERT "process id = %d command= %s start_code = %lx", (int)task->pid, task->comm, mm->start_code);
 	return 0;
 }
 static void cleanup_hello(void)
-{
+{dmes
 	printk(KERN_INFO "Goodbye, world!\n");
 }
 module_init(init_hello);
