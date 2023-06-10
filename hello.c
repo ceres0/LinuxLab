@@ -12,7 +12,7 @@ static int init_hello(void)
     for_each_process(task) 
    	{
         if(task->pid==pid_no) break;
-           printk(KERN_ALERT "process id = %d tpid= %d",(int)task->pid,(int)task->comm);
+           printk(KERN_ALERT "process id = %d command= %s",(int)task->pid,task->comm);
    	}
 	printk(KERN_ALERT "\n");
 	return 0;
