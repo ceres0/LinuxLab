@@ -7,8 +7,12 @@
 #include <linux/kallsyms.h>
 #include <linux/kprobes.h>
 
+#include <linux/fs.h>
+#include <linux/kernel.h>
+#include <linux/syscalls.h>
+#include <linux/export.h>
+
 #define __NR_syscall 285 /* 系统调用号285 */
-unsigned long *sys_call_table;
 
 unsigned int clear_and_return_cr0(void);
 void setback_cr0(unsigned int val);
@@ -16,7 +20,7 @@ static int sys_mycall(void);
 
 int orig_cr0; /* 用来存储cr0寄存器原来的值 */
 unsigned long *sys_call_table = 0;
-static int (*anything_saved)(void); /*定义一个函数指针，用来保存一个系统调用*/
+static int (*saved1)(void), (*saved2)(void); /*定义一个函数指针，用来保存一个系统调用*/
 /*
  * 设置cr0寄存器的第17位为0
  */
@@ -88,10 +92,19 @@ static int __init init_addsyscall(void)
 		return ret;
 	}
 	sys_call_table = (unsigned long *)kallsyms_lookup_name_fun("sys_call_table"); /* 获取系统调用服务首地址 */
+	
 	printk("sys_call_table: 0x%p\n", sys_call_table);
-	anything_saved = (int (*)(void))(sys_call_table[__NR_syscall]); /* 保存原始系统调用 */
+	
 	orig_cr0 = clear_and_return_cr0();								/* 设置cr0可更改 */
+	
+	// 劫持原有系统调用
+	saved1 = (int (*)(void))(sys_call_table[__NR_mkdir]); 			/* 保存原始系统调用 */
+	sys_call_table[__NR_mkdir] = (unsigned long)&sys_mycall;		/* 更改原始的系统调用服务地址 */
+
+	// 添加新的系统调用
+	saved2 = (int (*)(void))(sys_call_table[__NR_syscall]); 		/* 保存原始系统调用 */
 	sys_call_table[__NR_syscall] = (unsigned long)&sys_mycall;		/* 更改原始的系统调用服务地址 */
+	
 	setback_cr0(orig_cr0);											/* 设置为原始的只读cr0 */
 	return 0;
 }
@@ -99,10 +112,11 @@ static int __init init_addsyscall(void)
 /*出口函数，卸载模块*/
 static void __exit exit_addsyscall(void)
 {
-	orig_cr0 = clear_and_return_cr0();							  /* 设置cr0中对sys_call_table的更改权限 */
-	sys_call_table[__NR_syscall] = (unsigned long)anything_saved; /* 设置cr0可更改 */
-	setback_cr0(orig_cr0);										  /* 恢复原有的中断向量表中的函数指针的值 */
-	printk("My syscall exit....\n");							  /* 恢复原有的cr0的值 */
+	orig_cr0 = clear_and_return_cr0();							  	/* 设置cr0中对sys_call_table的更改权限 */
+	sys_call_table[__NR_mkdir] = (unsigned long)saved1;			/* 设置cr0可更改 */
+	sys_call_table[__NR_syscall] = (unsigned long)saved2;			/* 设置cr0可更改 */
+	setback_cr0(orig_cr0);										  	/* 恢复原有的中断向量表中的函数指针的值 */
+	printk("My syscall exit....\n");							  	/* 恢复原有的cr0的值 */
 }
 
 module_init(init_addsyscall);
